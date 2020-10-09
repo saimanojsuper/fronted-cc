@@ -7,5 +7,17 @@ pipeline {
                 bat 'npm install'
             }
         }
+      stage('Test') {
+                    steps {
+                        echo 'test started'
+                        bat 'npm run test'
+                        echo 'test ended'
+                    }
+                }
+      stage('Sonarqube'){
+        steps{
+          bat 'sonar-scanner'
+        }
+      }
     }
 }
