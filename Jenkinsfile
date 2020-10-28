@@ -4,19 +4,25 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                bat 'npm install'
+                sh 'npm install'
             }
         }
       stage('Test') {
                     steps {
                         echo 'test started'
-                        bat 'npm run test'
+                        sh 'npm run test'
                         echo 'test ended'
                     }
                 }
-      stage('Sonarqube'){
-        steps{
-          bat 'sonar-scanner'
+       stage('sonar-scanner') {
+      steps {
+        script {
+          sonarqubeScannerHome = tool name: 'sonar', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        }
+        withSonarQubeEnv('sonar') {
+          sh "${sonarqubeScannerHome}/bin/sonar-scanner "
+     
+           }
         }
       }
     }
